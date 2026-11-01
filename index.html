@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arvexis Music – Bot musik Discord</title>
+<meta name="description" content="Arvexis Music: bot musik Discord untuk memutar lagu dari YouTube, link, dan playlist. Lima bot, perintah sama, prefix a!">
+<meta property="og:title" content="Arvexis Music – Bot musik Discord">
+<meta property="og:description" content="Putar musik di server Discord kamu. Ketik a!play dan selesai.">
+<meta property="og:image" content="assets/banner.png">
+<link rel="icon" type="image/png" href="assets/bot-1.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#130c0e;
+  --bg-2:#1b1215;
+  --panel:#221619;
+  --line:#3b2429;
+  --red:#e3153f;
+  --red-deep:#8e0f27;
+  --silver:#cfcfd6;
+  --text:#f3ebe8;
+  --mute:#ab9a9d;
+  --head:"Chakra Petch","Segoe UI",sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --cut:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--silver);outline-offset:3px}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+
+/* chamfered corners echo the logo's angular cuts */
+.cut{clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut))}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--head);font-weight:700;font-size:19px;letter-spacing:.01em}
+.brand img{width:34px;height:34px}
+.nav{display:flex;gap:22px;margin-left:auto}
+.nav a{text-decoration:none;color:var(--mute);font-size:15px;font-weight:500;padding:6px 0;border-bottom:2px solid transparent}
+.nav a:hover{color:var(--text);border-color:var(--red)}
+.lang{display:flex;border:1px solid var(--line)}
+.lang button{background:none;border:0;padding:5px 11px;font-family:var(--head);font-weight:600;font-size:13px;color:var(--mute)}
+.lang button[aria-pressed="true"]{background:var(--red);color:#fff}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:0;text-decoration:none;font-family:var(--head);font-weight:600;font-size:16px;--cut:10px;clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));transition:background .15s}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#ff2a54}
+.btn-line{background:var(--line);color:var(--text)}
+.btn-line:hover{background:#4d3037}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero::before{content:"";position:absolute;inset:0;background:url(assets/banner.png) 72% 40%/cover no-repeat;opacity:.55}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 8%,rgba(19,12,14,.82) 48%,rgba(19,12,14,.35) 100%)}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-block:84px}
+.hero h1{font-family:var(--head);font-weight:700;font-size:clamp(34px,5vw,56px);line-height:1.08;letter-spacing:-.01em;max-width:13em}
+.hero p.lead{margin-top:20px;color:#d8cacc;font-size:18px;max-width:30em}
+.hero .actions{margin-top:30px;display:flex;flex-wrap:wrap;gap:12px}
+.hero .note{margin-top:18px;color:var(--mute);font-size:14px}
+
+/* chat mock */
+.chat{background:#313338;color:#dbdee1;padding:18px 18px 20px;font-family:"Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.4;border:1px solid #1e1f22;box-shadow:0 18px 40px rgba(0,0,0,.45);transform:rotate(1.2deg)}
+.chat .msg{display:flex;gap:12px}
+.chat .msg + .msg{margin-top:18px}
+.av{flex:none;width:38px;height:38px;border-radius:50%;background:#5865f2;display:grid;place-items:center;color:#fff;font-weight:600;font-size:15px;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.who{font-weight:600;color:#f2f3f5}
+.who small{font-weight:400;color:#949ba4;font-size:12px;margin-left:6px}
+.tag{background:#5865f2;color:#fff;font-size:10px;font-weight:600;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:1px}
+.cmd{font-family:var(--mono);font-size:14px;color:#dbdee1}
+.embed{margin-top:6px;background:#2b2d31;border-left:4px solid var(--red);padding:12px 14px;max-width:340px}
+.embed .lbl{font-size:12px;font-weight:600;color:#b5bac1}
+.embed .title{font-weight:600;color:#00a8fc;margin-top:3px}
+.embed .meta{font-size:13px;color:#b5bac1;margin-top:2px}
+.bar{margin-top:12px;height:4px;background:#4e5058;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;width:38%;background:var(--red);animation:prog 24s linear infinite}
+.times{display:flex;justify-content:space-between;font-size:12px;color:#949ba4;margin-top:5px}
+.eq{display:flex;align-items:flex-end;gap:3px;height:20px;margin-top:10px}
+.eq span{width:4px;background:var(--red);height:30%;animation:eq 1s ease-in-out infinite}
+.eq span:nth-child(2){animation-delay:-.7s}.eq span:nth-child(3){animation-delay:-.3s}.eq span:nth-child(4){animation-delay:-.9s}.eq span:nth-child(5){animation-delay:-.5s}.eq span:nth-child(6){animation-delay:-.15s}
+@keyframes eq{0%,100%{height:20%}50%{height:100%}}
+@keyframes prog{from{width:12%}to{width:96%}}
+
+/* sections */
+section.block{padding-block:84px;border-bottom:1px solid var(--line)}
+.sec-head{max-width:40em;margin-bottom:44px}
+.sec-head h2{font-family:var(--head);font-weight:700;font-size:clamp(28px,3.4vw,38px);line-height:1.15}
+.sec-head p{margin-top:12px;color:var(--mute);font-size:17px}
+
+/* features: plain ruled list */
+.feat{display:grid;grid-template-columns:1fr 1fr;column-gap:64px}
+.feat div{padding:22px 0;border-top:1px solid var(--line)}
+.feat h3{font-family:var(--head);font-weight:600;font-size:20px;margin-bottom:6px}
+.feat p{color:var(--mute);max-width:26em}
+.feat code,.steps code{font-family:var(--mono);font-size:.88em;background:var(--panel);padding:1px 6px;color:#ffc9d3}
+
+/* bots */
+.bots-band{background:var(--bg-2)}
+.bots{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+.bot{background:var(--panel);padding:14px 14px 18px;display:flex;flex-direction:column;gap:12px;--cut:16px}
+.bot img{width:100%;aspect-ratio:1;object-fit:cover}
+.bot h3{font-family:var(--head);font-weight:600;font-size:18px;line-height:1.2}
+.bot h3 span{display:block;font-size:13px;font-weight:500;color:var(--mute);margin-top:2px}
+.bot .btn{margin-top:auto;padding:10px 14px;font-size:15px}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:s}
+.steps li{list-style:none;padding:4px 28px 4px 0;counter-increment:s}
+.steps li::before{content:counter(s);display:block;font-family:var(--head);font-weight:700;font-size:44px;line-height:1;color:var(--red);margin-bottom:10px}
+.steps strong{font-family:var(--head);font-weight:600;font-size:19px;display:block;margin-bottom:4px}
+.steps span{color:var(--mute)}
+
+/* commands */
+.tools{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center}
+.search{flex:1 1 240px;max-width:340px;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:10px 14px;font:inherit}
+.search::placeholder{color:#7d6c70}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{background:none;border:1px solid var(--line);padding:7px 14px;font-family:var(--head);font-weight:600;font-size:14px;color:var(--mute)}
+.tabs button:hover{color:var(--text)}
+.tabs button[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.list{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(220px,340px) 1fr auto;gap:8px 24px;align-items:center;padding:16px 4px;border-bottom:1px solid var(--line)}
+.row .c{font-family:var(--mono);font-size:15px;color:#fff}
+.row .c em{font-style:normal;color:#ff8da3}
+.row .al{display:block;margin-top:3px;font-size:12.5px;color:var(--mute);font-family:var(--mono)}
+.row p{color:#d3c5c7}
+.copy{background:none;border:1px solid var(--line);padding:6px 14px;font-size:13.5px;color:var(--mute);min-width:84px}
+.copy:hover{border-color:var(--red);color:var(--text)}
+.copy.ok{background:var(--red);border-color:var(--red);color:#fff}
+.empty{padding:36px 4px;color:var(--mute)}
+
+/* footer */
+footer{padding:44px 0 56px;color:var(--mute);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between;align-items:center}
+footer img{width:30px}
+.fl{display:flex;align-items:center;gap:10px}
+
+@media (max-width:960px){
+  .hero .wrap{grid-template-columns:1fr;padding-block:56px}
+  .chat{transform:none;max-width:420px}
+  .bots{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:700px){
+  .nav{display:none}
+  .top .wrap{justify-content:space-between}
+  .feat{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr;gap:26px}
+  .bots{grid-template-columns:repeat(2,1fr)}
+  .row{grid-template-columns:1fr auto}
+  .row p{grid-column:1/-1;order:3}
+  section.block{padding-block:60px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .eq span,.bar i{animation:none}
+  .eq span{height:60%}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/bot-1.png" alt="">Arvexis Music</a>
+    <nav class="nav">
+      <a href="#fitur" data-i18n="nav_feat">Fitur</a>
+      <a href="#bot" data-i18n="nav_bots">Undang</a>
+      <a href="#perintah" data-i18n="nav_cmds">Perintah</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="id" aria-pressed="true">ID</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1 data-i18n="hero_h">Putar musik di Discord, langsung dari servermu.</h1>
+        <p class="lead" data-i18n-html="hero_p">Arvexis Music memutar lagu dari YouTube, link, dan playlist. Ketik <code>a!play</code> lalu judulnya, selesai.</p>
+        <div class="actions">
+          <a class="btn btn-red" href="#bot" data-i18n="cta_invite">Undang bot</a>
+          <a class="btn btn-line" href="#perintah" data-i18n="cta_cmds">Lihat perintah</a>
+        </div>
+        <p class="note" data-i18n="hero_note">Ada 5 bot dengan perintah yang sama. Satu sedang dipakai? Undang yang lain.</p>
+      </div>
+
+      <div class="chat" aria-hidden="true">
+        <div class="msg">
+          <div class="av">R</div>
+          <div>
+            <div class="who">Rizky<small>Hari ini 21.04</small></div>
+            <div class="cmd">a!play midnight drive synthwave</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="av"><img src="assets/bot-1.png" alt=""></div>
+          <div style="min-width:0">
+            <div class="who">Arvexis Music<span class="tag">BOT</span></div>
+            <div class="embed">
+              <div class="lbl" data-i18n="mock_now">Sedang diputar</div>
+              <div class="title">Midnight Drive – Synthwave Mix</div>
+              <div class="meta" data-i18n="mock_meta">Diminta oleh Rizky</div>
+              <div class="bar"><i></i></div>
+              <div class="times"><span>1:24</span><span>3:42</span></div>
+              <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="fitur">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="feat_h">Yang bisa dilakukan Arvexis Music</h2>
+      </div>
+      <div class="feat">
+        <div><h3 data-i18n="f1_h">YouTube, link, dan playlist</h3><p data-i18n="f1_p">Ketik judul lagu atau tempel link. Playlist juga langsung masuk antrean.</p></div>
+        <div><h3 data-i18n="f2_h">Mode 24/7</h3><p data-i18n-html="f2_p">Bot tetap di voice channel walau tidak ada lagu yang diputar. Nyalakan dengan <code>a!247</code>.</p></div>
+        <div><h3 data-i18n="f3_h">Autoplay</h3><p data-i18n="f3_p">Antrean habis? Bot memutar lagu rekomendasi sendiri supaya suasana tidak sepi.</p></div>
+        <div><h3 data-i18n="f4_h">Antrean yang bisa diatur</h3><p data-i18n="f4_p">Ulang satu lagu atau seluruh antrean, acak urutan, hapus satu lagu, atau kosongkan semuanya.</p></div>
+        <div><h3 data-i18n="f5_h">Volume sampai 150</h3><p data-i18n-html="f5_p">Atur volume dari 1 sampai 150, dan loncat ke menit tertentu dengan <code>a!seek</code>.</p></div>
+        <div><h3 data-i18n="f6_h">Singkatan di mana-mana</h3><p data-i18n-html="f6_p">Hampir semua perintah punya alias pendek, misalnya <code>a!p</code> untuk play dan <code>a!s</code> untuk skip.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block bots-band" id="bot">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="bots_h">Pilih bot, lalu undang ke server</h2>
+        <p data-i18n="bots_p">Kelima bot punya perintah dan prefix yang sama. Satu bot hanya bisa berada di satu voice channel per server, jadi undang lebih dari satu kalau servermu punya beberapa ruang voice yang ramai.</p>
+      </div>
+      <div class="bots" id="bots"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="steps_h">Mulai dalam tiga langkah</h2></div>
+      <ol class="steps">
+        <li><strong data-i18n="s1_h">Undang bot</strong><span data-i18n="s1_p">Pilih salah satu bot di atas dan beri izin untuk servermu.</span></li>
+        <li><strong data-i18n="s2_h">Masuk voice channel</strong><span data-i18n="s2_p">Bot akan menyusul ke channel tempat kamu berada.</span></li>
+        <li><strong data-i18n="s3_h">Putar lagu</strong><span data-i18n-html="s3_p">Ketik <code>a!play</code> lalu judul atau link lagunya.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="perintah" style="border-bottom:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="cmd_h">Daftar perintah</h2>
+        <p data-i18n="cmd_p">Prefix-nya a!. Isi bagian dalam &lt; &gt; wajib ada, bagian dalam [ ] boleh dikosongkan. Klik tombol salin untuk mengambil perintahnya.</p>
+      </div>
+      <div class="tools">
+        <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Cari perintah" aria-label="Cari perintah">
+        <div class="tabs" id="tabs"></div>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fl"><img src="assets/bot-1.png" alt=""><span>Arvexis Music</span></div>
+    <span data-i18n="foot">Bagian dari komunitas Arvexis. Tidak berafiliasi dengan Discord maupun YouTube.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var INVITES = [
+    "https://discord.com/oauth2/authorize?client_id=1561461794562899998",
+    "https://discord.com/oauth2/authorize?client_id=1561466347194425525",
+    "https://discord.com/oauth2/authorize?client_id=1561466773310808064",
+    "https://discord.com/oauth2/authorize?client_id=1561467021307150448",
+    "https://discord.com/oauth2/authorize?client_id=1561467218208759808"
+  ];
+
+  var T = {
+    id:{
+      nav_feat:"Fitur", nav_bots:"Undang", nav_cmds:"Perintah",
+      hero_h:"Putar musik di Discord, langsung dari servermu.",
+      hero_p:"Arvexis Music memutar lagu dari YouTube, link, dan playlist. Ketik <code>a!play</code> lalu judulnya, selesai.",
+      cta_invite:"Undang bot", cta_cmds:"Lihat perintah",
+      hero_note:"Ada 5 bot dengan perintah yang sama. Satu sedang dipakai? Undang yang lain.",
+      mock_now:"Sedang diputar", mock_meta:"Diminta oleh Rizky",
+      feat_h:"Yang bisa dilakukan Arvexis Music",
+      f1_h:"YouTube, link, dan playlist", f1_p:"Ketik judul lagu atau tempel link. Playlist juga langsung masuk antrean.",
+      f2_h:"Mode 24/7", f2_p:"Bot tetap di voice channel walau tidak ada lagu yang diputar. Nyalakan dengan <code>a!247</code>.",
+      f3_h:"Autoplay", f3_p:"Antrean habis? Bot memutar lagu rekomendasi sendiri supaya suasana tidak sepi.",
+      f4_h:"Antrean yang bisa diatur", f4_p:"Ulang satu lagu atau seluruh antrean, acak urutan, hapus satu lagu, atau kosongkan semuanya.",
+      f5_h:"Volume sampai 150", f5_p:"Atur volume dari 1 sampai 150, dan loncat ke menit tertentu dengan <code>a!seek</code>.",
+      f6_h:"Singkatan di mana-mana", f6_p:"Hampir semua perintah punya alias pendek, misalnya <code>a!p</code> untuk play dan <code>a!s</code> untuk skip.",
+      bots_h:"Pilih bot, lalu undang ke server",
+      bots_p:"Kelima bot punya perintah dan prefix yang sama. Satu bot hanya bisa berada di satu voice channel per server, jadi undang lebih dari satu kalau servermu punya beberapa ruang voice yang ramai.",
+      bot:"Bot", invite:"Undang",
+      steps_h:"Mulai dalam tiga langkah",
+      s1_h:"Undang bot", s1_p:"Pilih salah satu bot di atas dan beri izin untuk servermu.",
+      s2_h:"Masuk voice channel", s2_p:"Bot akan menyusul ke channel tempat kamu berada.",
+      s3_h:"Putar lagu", s3_p:"Ketik <code>a!play</code> lalu judul atau link lagunya.",
+      cmd_h:"Daftar perintah",
+      cmd_p:"Prefix-nya a!. Isi bagian dalam < > wajib ada, bagian dalam [ ] boleh dikosongkan. Klik tombol salin untuk mengambil perintahnya.",
+      search:"Cari perintah", all:"Semua", c_play:"Putar", c_queue:"Antrean", c_voice:"Voice", c_info:"Info",
+      copy:"Salin", copied:"Disalin",
+      empty:"Tidak ada perintah yang cocok. Coba kata lain.",
+      foot:"Bagian dari komunitas Arvexis. Tidak berafiliasi dengan Discord maupun YouTube."
+    },
+    en:{
+      nav_feat:"Features", nav_bots:"Invite", nav_cmds:"Commands",
+      hero_h:"Play music in Discord, right from your server.",
+      hero_p:"Arvexis Music plays songs from YouTube, links and playlists. Type <code>a!play</code> and a title, and you're done.",
+      cta_invite:"Invite bot", cta_cmds:"See commands",
+      hero_note:"There are 5 bots with identical commands. One busy? Invite another.",
+      mock_now:"Now playing", mock_meta:"Requested by Rizky",
+      feat_h:"What Arvexis Music can do",
+      f1_h:"YouTube, links and playlists", f1_p:"Type a song title or paste a link. Playlists go straight into the queue.",
+      f2_h:"24/7 mode", f2_p:"The bot stays in the voice channel even when nothing is playing. Turn it on with <code>a!247</code>.",
+      f3_h:"Autoplay", f3_p:"Queue ran out? The bot picks recommended songs so the room never goes quiet.",
+      f4_h:"A queue you control", f4_p:"Loop one track or the whole queue, shuffle, remove a single song, or clear everything.",
+      f5_h:"Volume up to 150", f5_p:"Set the volume from 1 to 150, and jump to any point in a song with <code>a!seek</code>.",
+      f6_h:"Shortcuts everywhere", f6_p:"Almost every command has a short alias, like <code>a!p</code> for play and <code>a!s</code> for skip.",
+      bots_h:"Pick a bot, then invite it to your server",
+      bots_p:"All five bots share the same commands and prefix. A bot can only sit in one voice channel per server, so invite more than one if your server has several busy voice rooms.",
+      bot:"Bot", invite:"Invite",
+      steps_h:"Get started in three steps",
+      s1_h:"Invite a bot", s1_p:"Pick any bot above and authorize it for your server.",
+      s2_h:"Join a voice channel", s2_p:"The bot will follow you into the channel you're in.",
+      s3_h:"Play a song", s3_p:"Type <code>a!play</code> followed by a title or link.",
+      cmd_h:"Command list",
+      cmd_p:"The prefix is a!. Parts in < > are required, parts in [ ] are optional. Use the copy button to grab a command.",
+      search:"Search commands", all:"All", c_play:"Playback", c_queue:"Queue", c_voice:"Voice", c_info:"Info",
+      copy:"Copy", copied:"Copied",
+      empty:"No commands match. Try another word.",
+      foot:"Part of the Arvexis community. Not affiliated with Discord or YouTube."
+    }
+  };
+
+  /* name, aliases, args, category, desc id/en */
+  var CMDS = [
+    ["play",["p"],"<judul / link>","play","Putar lagu (YouTube / link / playlist)","Play a song (YouTube / link / playlist)"],
+    ["pause",["pa"],"","play","Jeda lagu","Pause the song"],
+    ["resume",["r","unpause"],"","play","Lanjutkan lagu","Resume the song"],
+    ["skip",["s","next"],"","play","Lewati lagu sekarang","Skip the current song"],
+    ["previous",["prev","back"],"","play","Kembali ke lagu sebelumnya","Go back to the previous song"],
+    ["stop",["clearstop"],"","play","Hentikan musik & kosongkan queue","Stop the music and clear the queue"],
+    ["seek",[],"<detik | m:ss>","play","Loncat ke posisi tertentu","Jump to a specific position"],
+    ["volume",["vol","v"],"<1-150>","play","Atur volume","Set the volume"],
+    ["queue",["q"],"","queue","Lihat antrean lagu","Show the song queue"],
+    ["remove",["rm"],"<nomor>","queue","Hapus lagu dari queue (nomor dari a!queue, mulai 2)","Remove a song from the queue (number from a!queue, starts at 2)"],
+    ["clear",["cq"],"","queue","Kosongkan queue (lagu sekarang tetap jalan)","Clear the queue (current song keeps playing)"],
+    ["shuffle",["sh"],"","queue","Acak urutan queue","Shuffle the queue order"],
+    ["loop",["l","repeat"],"[off|track|queue]","queue","Atur mode ulang","Set the repeat mode"],
+    ["autoplay",["ap"],"","queue","Putar lagu rekomendasi otomatis saat queue habis","Automatically play recommended songs when the queue ends"],
+    ["join",["j","summon"],"","voice","Panggil bot ke voice channel kamu","Call the bot to your voice channel"],
+    ["leave",["dc","disconnect","stopbot"],"","voice","Keluarkan bot dari voice","Make the bot leave voice"],
+    ["247",["24/7","stay"],"","voice","Aktif/nonaktifkan mode 24/7 (bot tidak keluar sendiri)","Toggle 24/7 mode (the bot won't leave on its own)"],
+    ["nowplaying",["np"],"","info","Lagu yang sedang diputar","Show the song that's playing"],
+    ["help",["h","commands"],"","info","Daftar command","List all commands"]
+  ];
+  var CATS = ["all","play","queue","voice","info"];
+
+  var lang = "id", cat = "all", term = "";
+  try{
+    var saved = localStorage.getItem("arvexis-lang");
+    if(saved === "id" || saved === "en") lang = saved;
+    else if((navigator.language||"").toLowerCase().indexOf("id") !== 0) lang = "en";
+  }catch(e){
+    if((navigator.language||"").toLowerCase().indexOf("id") !== 0) lang = "en";
+  }
+
+  var $ = function(s){return document.querySelector(s)};
+  var botsEl = $("#bots"), tabsEl = $("#tabs"), listEl = $("#list"), qEl = $("#q");
+
+  function buildBots(){
+    botsEl.innerHTML = "";
+    INVITES.forEach(function(url,i){
+      var d = document.createElement("div");
+      d.className = "bot cut";
+      d.innerHTML = '<img src="assets/bot-'+(i+1)+'.png" alt="Arvexis Music '+(i+1)+'" width="300" height="300" loading="lazy">'+
+        '<h3>Arvexis Music<span>'+T[lang].bot+' '+(i+1)+'</span></h3>'+
+        '<a class="btn btn-red" href="'+url+'" target="_blank" rel="noopener">'+T[lang].invite+'</a>';
+      botsEl.appendChild(d);
+    });
+  }
+
+  function buildTabs(){
+    tabsEl.innerHTML = "";
+    CATS.forEach(function(c){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = c === "all" ? T[lang].all : T[lang]["c_"+c];
+      b.setAttribute("aria-pressed", c === cat ? "true" : "false");
+      b.onclick = function(){cat = c; buildTabs(); buildList();};
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+  function buildList(){
+    var t = term.trim().toLowerCase().replace(/^a!/,"");
+    var rows = CMDS.filter(function(c){
+      if(cat !== "all" && c[3] !== cat) return false;
+      if(!t) return true;
+      var hay = [c[0]].concat(c[1]).join(" ").toLowerCase() + " " + (lang==="id"?c[4]:c[5]).toLowerCase();
+      return hay.indexOf(t) !== -1;
+    });
+    listEl.innerHTML = "";
+    if(!rows.length){
+      listEl.innerHTML = '<div class="empty">'+T[lang].empty+'</div>';
+      return;
+    }
+    rows.forEach(function(c){
+      var r = document.createElement("div");
+      r.className = "row";
+      var al = c[1].length ? '<span class="al">'+c[1].map(function(a){return "a!"+esc(a)}).join("  ")+'</span>' : "";
+      r.innerHTML = '<div><span class="c">a!'+esc(c[0])+(c[2]?' <em>'+esc(c[2])+'</em>':'')+'</span>'+al+'</div>'+
+        '<p>'+esc(lang==="id"?c[4]:c[5])+'</p>'+
+        '<button type="button" class="copy">'+T[lang].copy+'</button>';
+      var btn = r.querySelector(".copy");
+      btn.onclick = function(){
+        var text = "a!"+c[0]+(c[2]?" ":"");
+        var done = function(){
+          btn.textContent = T[lang].copied; btn.classList.add("ok");
+          setTimeout(function(){btn.textContent = T[lang].copy; btn.classList.remove("ok");},1400);
+        };
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(done,function(){});
+        }else{
+          var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+          ta.select(); try{document.execCommand("copy"); done();}catch(e){} document.body.removeChild(ta);
+        }
+      };
+      listEl.appendChild(r);
+    });
+  }
+
+  function applyLang(){
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){el.textContent = T[lang][el.dataset.i18n]});
+    document.querySelectorAll("[data-i18n-html]").forEach(function(el){el.innerHTML = T[lang][el.dataset.i18nHtml]});
+    document.querySelectorAll("[data-i18n-ph]").forEach(function(el){
+      el.placeholder = T[lang][el.dataset.i18nPh]; el.setAttribute("aria-label", T[lang][el.dataset.i18nPh]);
+    });
+    document.querySelectorAll(".lang button").forEach(function(b){
+      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
+    });
+    document.title = lang === "id" ? "Arvexis Music – Bot musik Discord" : "Arvexis Music – Discord music bot";
+    buildBots(); buildTabs(); buildList();
+  }
+
+  document.querySelectorAll(".lang button").forEach(function(b){
+    b.onclick = function(){
+      lang = b.dataset.lang;
+      try{localStorage.setItem("arvexis-lang", lang);}catch(e){}
+      applyLang();
+    };
+  });
+  qEl.addEventListener("input", function(){term = qEl.value; buildList();});
+
+  applyLang();
+})();
+</script>
+</body>
+</html>
