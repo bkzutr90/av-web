@@ -79,18 +79,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 .who small{font-weight:400;color:#949ba4;font-size:12px;margin-left:6px}
 .tag{background:#5865f2;color:#fff;font-size:10px;font-weight:600;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:1px}
 .cmd{font-family:var(--mono);font-size:14px;color:#dbdee1}
-.embed{margin-top:6px;background:#2b2d31;border-left:4px solid var(--red);padding:12px 14px;max-width:340px}
-.embed .lbl{font-size:12px;font-weight:600;color:#b5bac1}
-.embed .title{font-weight:600;color:#00a8fc;margin-top:3px}
-.embed .meta{font-size:13px;color:#b5bac1;margin-top:2px}
-.bar{margin-top:12px;height:4px;background:#4e5058;position:relative}
-.bar i{position:absolute;inset:0 auto 0 0;width:38%;background:var(--red);animation:prog 24s linear infinite}
-.times{display:flex;justify-content:space-between;font-size:12px;color:#949ba4;margin-top:5px}
-.eq{display:flex;align-items:flex-end;gap:3px;height:20px;margin-top:10px}
-.eq span{width:4px;background:var(--red);height:30%;animation:eq 1s ease-in-out infinite}
-.eq span:nth-child(2){animation-delay:-.7s}.eq span:nth-child(3){animation-delay:-.3s}.eq span:nth-child(4){animation-delay:-.9s}.eq span:nth-child(5){animation-delay:-.5s}.eq span:nth-child(6){animation-delay:-.15s}
-@keyframes eq{0%,100%{height:20%}50%{height:100%}}
-@keyframes prog{from{width:12%}to{width:96%}}
+
+/* now playing embed */
+.embed{margin-top:6px;background:#2b2d31;border-left:4px solid #4752c4;border-radius:4px;padding:12px 14px;max-width:400px;display:grid;grid-template-columns:1fr 84px;gap:14px;align-items:start}
+.embed .line{font-size:15px;line-height:1.35;color:#f2f3f5}
+.embed .line a{color:#00a8fc;text-decoration:none}
+.embed .req{margin-top:10px;font-size:14px;font-weight:700;color:#f2f3f5}
+.embed .thumb{width:84px;height:58px;border-radius:4px;object-fit:cover}
 
 /* sections */
 section.block{padding-block:84px;border-bottom:1px solid var(--line)}
@@ -148,7 +143,7 @@ footer img{width:30px}
 
 @media (max-width:960px){
   .hero .wrap{grid-template-columns:1fr;padding-block:56px}
-  .chat{transform:none;max-width:420px}
+  .chat{transform:none;max-width:460px}
   .bots{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:700px){
@@ -163,8 +158,6 @@ footer img{width:30px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .eq span,.bar i{animation:none}
-  .eq span{height:60%}
 }
 </style>
 </head>
@@ -202,8 +195,8 @@ footer img{width:30px}
         <div class="msg">
           <div class="av">F</div>
           <div>
-            <div class="who">Ferrsyz<small>Hari ini 21.04</small></div>
-            <div class="cmd">a!play midnight drive synthwave</div>
+            <div class="who">ferrsyz<small>Hari ini 21.04</small></div>
+            <div class="cmd">a!play snowman</div>
           </div>
         </div>
         <div class="msg">
@@ -211,12 +204,11 @@ footer img{width:30px}
           <div style="min-width:0">
             <div class="who">Arvexis Music<span class="tag">APP</span></div>
             <div class="embed">
-              <div class="lbl" data-i18n="mock_now">Sedang diputar</div>
-              <div class="title">Midnight Drive – Synthwave Mix</div>
-              <div class="meta" data-i18n="mock_meta">Diminta oleh Ferrsyz</div>
-              <div class="bar"><i></i></div>
-              <div class="times"><span>1:24</span><span>3:42</span></div>
-              <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div>
+                <div class="line"><span data-i18n="mock_now">Sedang diputar:</span> <a href="#top" tabindex="-1">Sia - Snowman [Official Video]</a> (2:53)</div>
+                <div class="req" data-i18n="mock_meta">Diminta oleh ferrsyz</div>
+              </div>
+              <img class="thumb" src="assets/thumb.png" alt="" onerror="this.onerror=null;this.src='assets/bot-1.png'">
             </div>
           </div>
         </div>
@@ -299,7 +291,7 @@ footer img{width:30px}
       hero_p:"Arvexis Music memutar lagu dari YouTube, link, dan playlist. Ketik <code>a!play</code> lalu judulnya, selesai.",
       cta_invite:"Undang bot", cta_cmds:"Lihat perintah",
       hero_note:"Ada 5 bot dengan perintah yang sama. Satu sedang dipakai? Undang yang lain.",
-      mock_now:"Sedang diputar", mock_meta:"Diminta oleh Ferrsyz",
+      mock_now:"Sedang diputar:", mock_meta:"Diminta oleh ferrsyz",
       feat_h:"Yang bisa dilakukan Arvexis Music",
       f1_h:"YouTube, link, dan playlist", f1_p:"Ketik judul lagu atau tempel link. Playlist juga langsung masuk antrean.",
       f2_h:"Mode 24/7", f2_p:"Bot tetap di voice channel walau tidak ada lagu yang diputar. Nyalakan dengan <code>a!247</code>.",
@@ -327,7 +319,7 @@ footer img{width:30px}
       hero_p:"Arvexis Music plays songs from YouTube, links and playlists. Type <code>a!play</code> and a title, and you're done.",
       cta_invite:"Invite bot", cta_cmds:"See commands",
       hero_note:"There are 5 bots with identical commands. One busy? Invite another.",
-      mock_now:"Now playing", mock_meta:"Requested by Ferrsyz",
+      mock_now:"Now playing:", mock_meta:"Requested by ferrsyz",
       feat_h:"What Arvexis Music can do",
       f1_h:"YouTube, links and playlists", f1_p:"Type a song title or paste a link. Playlists go straight into the queue.",
       f2_h:"24/7 mode", f2_p:"The bot stays in the voice channel even when nothing is playing. Turn it on with <code>a!247</code>.",
