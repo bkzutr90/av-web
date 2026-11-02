@@ -110,8 +110,15 @@ section.block{padding-block:84px;border-bottom:1px solid var(--line)}
 .bot p{color:var(--mute);font-size:14.5px;line-height:1.5}
 .bot .btn{margin-top:auto;padding:10px 14px;font-size:15px}
 
-/* other bots */
-.others{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+/* other bots: horizontal scroller */
+.sec-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:44px}
+.sec-row .sec-head{margin-bottom:0}
+.arrows{display:flex;gap:8px;flex:none}
+.arrows[hidden]{display:none}
+.arrows button{width:42px;height:42px;background:var(--line);border:0;color:var(--text);font-family:var(--head);font-weight:700;font-size:20px;line-height:1;--cut:8px;clip-path:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut))}
+.arrows button:hover{background:var(--red)}
+.others{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:16px;scrollbar-width:thin;scrollbar-color:var(--red-deep) transparent}
+.others .bot{flex:0 0 min(300px,78%);scroll-snap-align:start}
 
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:s}
@@ -119,25 +126,6 @@ section.block{padding-block:84px;border-bottom:1px solid var(--line)}
 .steps li::before{content:counter(s);display:block;font-family:var(--head);font-weight:700;font-size:44px;line-height:1;color:var(--red);margin-bottom:10px}
 .steps strong{font-family:var(--head);font-weight:600;font-size:19px;display:block;margin-bottom:4px}
 .steps span{color:var(--mute)}
-
-/* commands */
-.tools{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center}
-.search{flex:1 1 240px;max-width:340px;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:10px 14px;font:inherit}
-.search::placeholder{color:#7d6c70}
-.tabs{display:flex;flex-wrap:wrap;gap:6px}
-.tabs button{background:none;border:1px solid var(--line);padding:7px 14px;font-family:var(--head);font-weight:600;font-size:14px;color:var(--mute)}
-.tabs button:hover{color:var(--text)}
-.tabs button[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
-.list{border-top:1px solid var(--line)}
-.row{display:grid;grid-template-columns:minmax(220px,340px) 1fr auto;gap:8px 24px;align-items:center;padding:16px 4px;border-bottom:1px solid var(--line)}
-.row .c{font-family:var(--mono);font-size:15px;color:#fff}
-.row .c em{font-style:normal;color:#ff8da3}
-.row .al{display:block;margin-top:3px;font-size:12.5px;color:var(--mute);font-family:var(--mono)}
-.row p{color:#d3c5c7}
-.copy{background:none;border:1px solid var(--line);padding:6px 14px;font-size:13.5px;color:var(--mute);min-width:84px}
-.copy:hover{border-color:var(--red);color:var(--text)}
-.copy.ok{background:var(--red);border-color:var(--red);color:#fff}
-.empty{padding:36px 4px;color:var(--mute)}
 
 /* footer */
 footer{padding:44px 0 56px;color:var(--mute);font-size:14px}
@@ -156,9 +144,6 @@ footer img{width:30px}
   .feat{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr;gap:26px}
   .bots{grid-template-columns:repeat(2,1fr)}
-  .others{grid-template-columns:1fr;max-width:380px}
-  .row{grid-template-columns:1fr auto}
-  .row p{grid-column:1/-1;order:3}
   section.block{padding-block:60px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -174,8 +159,8 @@ footer img{width:30px}
     <nav class="nav">
       <a href="#fitur" data-i18n="nav_feat">Fitur</a>
       <a href="#bot" data-i18n="nav_bots">Undang</a>
-      <a href="#perintah" data-i18n="nav_cmds">Perintah</a>
       <a href="#lainnya" data-i18n="nav_more">Bot lain</a>
+      <a href="commands.html" data-i18n="nav_cmds">Perintah</a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" data-lang="id" aria-pressed="true">ID</button>
@@ -192,7 +177,7 @@ footer img{width:30px}
         <p class="lead" data-i18n-html="hero_p">Arvexis Music memutar lagu dari YouTube, link, dan playlist. Ketik <code>a!play</code> lalu judulnya, selesai.</p>
         <div class="actions">
           <a class="btn btn-red" href="#bot" data-i18n="cta_invite">Undang bot</a>
-          <a class="btn btn-line" href="#perintah" data-i18n="cta_cmds">Lihat perintah</a>
+          <a class="btn btn-line" href="commands.html" data-i18n="cta_cmds">Lihat perintah</a>
         </div>
         <p class="note" data-i18n="hero_note">Ada 5 bot dengan perintah yang sama. Satu sedang dipakai? Undang yang lain.</p>
       </div>
@@ -259,27 +244,19 @@ footer img{width:30px}
     </div>
   </section>
 
-  <section class="block" id="perintah">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2 data-i18n="cmd_h">Daftar perintah</h2>
-        <p data-i18n="cmd_p">Prefix-nya a!. Isi bagian dalam &lt; &gt; wajib ada, bagian dalam [ ] boleh dikosongkan. Klik tombol salin untuk mengambil perintahnya.</p>
-      </div>
-      <div class="tools">
-        <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Cari perintah" aria-label="Cari perintah">
-        <div class="tabs" id="tabs"></div>
-      </div>
-      <div class="list" id="list"></div>
-    </div>
-  </section>
-
   <section class="block bots-band" id="lainnya" style="border-bottom:0">
     <div class="wrap">
-      <div class="sec-head">
-        <h2 data-i18n="more_h">Bot Arvexis lainnya</h2>
-        <p data-i18n="more_p">Selain musik, Arvexis punya bot untuk tiket, game werewolf, dan pet virtual. Masing-masing diundang terpisah.</p>
+      <div class="sec-row">
+        <div class="sec-head">
+          <h2 data-i18n="more_h">Bot Arvexis lainnya</h2>
+          <p data-i18n="more_p">Selain musik, Arvexis punya bot untuk tiket, game werewolf, dan pet virtual. Masing-masing diundang terpisah.</p>
+        </div>
+        <div class="arrows" id="arrows" hidden>
+          <button type="button" id="prev" aria-label="Sebelumnya">&larr;</button>
+          <button type="button" id="next" aria-label="Berikutnya">&rarr;</button>
+        </div>
       </div>
-      <div class="others" id="others"></div>
+      <div class="others" id="others" tabindex="0"></div>
     </div>
   </section>
 </main>
@@ -287,6 +264,7 @@ footer img{width:30px}
 <footer>
   <div class="wrap">
     <div class="fl"><span>Arvexis Music</span><span>by</span><span>Ferrsyz</span></div>
+    <a href="commands.html" data-i18n="nav_cmds">Perintah</a>
   </div>
 </footer>
 
@@ -329,11 +307,7 @@ footer img{width:30px}
       s1_h:"Undang bot", s1_p:"Pilih salah satu bot di atas dan beri izin untuk servermu.",
       s2_h:"Masuk voice channel", s2_p:"Bot akan menyusul ke channel tempat kamu berada.",
       s3_h:"Putar lagu", s3_p:"Ketik <code>a!play</code> lalu judul atau link lagunya.",
-      cmd_h:"Daftar perintah",
-      cmd_p:"Prefix-nya a!. Isi bagian dalam < > wajib ada, bagian dalam [ ] boleh dikosongkan. Klik tombol salin untuk mengambil perintahnya.",
-      search:"Cari perintah", all:"Semua", c_play:"Putar", c_queue:"Antrean", c_voice:"Voice", c_info:"Info",
-      copy:"Salin", copied:"Disalin",
-      empty:"Tidak ada perintah yang cocok. Coba kata lain.",
+      prev:"Sebelumnya", next:"Berikutnya",
       more_h:"Bot Arvexis lainnya",
       more_p:"Selain musik, Arvexis punya bot untuk tiket, game werewolf, dan pet virtual. Masing-masing diundang terpisah.",
       t_ticket:"Arvexis Ticket", s_ticket:"Sistem tiket", p_ticket:"Panel tiket dengan kategori dan form sendiri, claim dan prioritas untuk staff, auto-close, serta penilaian lewat DM. Pakai /ticket setup untuk memulai.",
@@ -362,11 +336,7 @@ footer img{width:30px}
       s1_h:"Invite a bot", s1_p:"Pick any bot above and authorize it for your server.",
       s2_h:"Join a voice channel", s2_p:"The bot will follow you into the channel you're in.",
       s3_h:"Play a song", s3_p:"Type <code>a!play</code> followed by a title or link.",
-      cmd_h:"Command list",
-      cmd_p:"The prefix is a!. Parts in < > are required, parts in [ ] are optional. Use the copy button to grab a command.",
-      search:"Search commands", all:"All", c_play:"Playback", c_queue:"Queue", c_voice:"Voice", c_info:"Info",
-      copy:"Copy", copied:"Copied",
-      empty:"No commands match. Try another word.",
+      prev:"Previous", next:"Next",
       more_h:"More Arvexis bots",
       more_p:"Besides music, Arvexis has bots for tickets, a werewolf game and virtual pets. Each one is invited separately.",
       t_ticket:"Arvexis Ticket", s_ticket:"Ticket system", p_ticket:"A ticket panel with your own categories and forms, claim and priority for staff, auto-close, and ratings via DM. Use /ticket setup to get started.",
@@ -376,31 +346,7 @@ footer img{width:30px}
     }
   };
 
-  /* name, aliases, args, category, desc id/en */
-  var CMDS = [
-    ["play",["p"],"<judul / link>","play","Putar lagu (YouTube / link / playlist)","Play a song (YouTube / link / playlist)"],
-    ["pause",["pa"],"","play","Jeda lagu","Pause the song"],
-    ["resume",["r","unpause"],"","play","Lanjutkan lagu","Resume the song"],
-    ["skip",["s","next"],"","play","Lewati lagu sekarang","Skip the current song"],
-    ["previous",["prev","back"],"","play","Kembali ke lagu sebelumnya","Go back to the previous song"],
-    ["stop",["clearstop"],"","play","Hentikan musik & kosongkan queue","Stop the music and clear the queue"],
-    ["seek",[],"<sec | m:ss>","play","Loncat ke posisi tertentu","Jump to a specific position"],
-    ["volume",["vol","v"],"<1-150>","play","Atur volume","Set the volume"],
-    ["queue",["q"],"","queue","Lihat antrean lagu","Show the song queue"],
-    ["remove",["rm"],"<number>","queue","Hapus lagu dari queue (nomor dari a!queue, mulai 2)","Remove a song from the queue (number from a!queue, starts at 2)"],
-    ["clear",["cq"],"","queue","Kosongkan queue (lagu sekarang tetap jalan)","Clear the queue (current song keeps playing)"],
-    ["shuffle",["sh"],"","queue","Acak urutan queue","Shuffle the queue order"],
-    ["loop",["l","repeat"],"[off|track|queue]","queue","Atur mode ulang","Set the repeat mode"],
-    ["autoplay",["ap"],"","queue","Putar lagu rekomendasi otomatis saat queue habis","Automatically play recommended songs when the queue ends"],
-    ["join",["j","summon"],"","voice","Panggil bot ke voice channel kamu","Call the bot to your voice channel"],
-    ["leave",["dc","disconnect","stopbot"],"","voice","Keluarkan bot dari voice","Make the bot leave voice"],
-    ["247",["24/7","stay"],"","voice","Aktif/nonaktifkan mode 24/7 (bot tidak keluar sendiri)","Toggle 24/7 mode (the bot won't leave on its own)"],
-    ["nowplaying",["np"],"","info","Lagu yang sedang diputar","Show the song that's playing"],
-    ["help",["h","commands"],"","info","Daftar command","List all commands"]
-  ];
-  var CATS = ["all","play","queue","voice","info"];
-
-  var lang = "id", cat = "all", term = "";
+  var lang = "id";
   try{
     var saved = localStorage.getItem("arvexis-lang");
     if(saved === "id" || saved === "en") lang = saved;
@@ -410,7 +356,7 @@ footer img{width:30px}
   }
 
   var $ = function(s){return document.querySelector(s)};
-  var botsEl = $("#bots"), othersEl = $("#others"), tabsEl = $("#tabs"), listEl = $("#list"), qEl = $("#q");
+  var botsEl = $("#bots"), othersEl = $("#others"), arrowsEl = $("#arrows");
 
   function buildBots(){
     botsEl.innerHTML = "";
@@ -435,72 +381,34 @@ footer img{width:30px}
         '<a class="btn btn-red" href="'+b.url+'" target="_blank" rel="noopener">'+T[lang].invite+'</a>';
       othersEl.appendChild(d);
     });
+    updateArrows();
   }
 
-  function buildTabs(){
-    tabsEl.innerHTML = "";
-    CATS.forEach(function(c){
-      var b = document.createElement("button");
-      b.type = "button";
-      b.textContent = c === "all" ? T[lang].all : T[lang]["c_"+c];
-      b.setAttribute("aria-pressed", c === cat ? "true" : "false");
-      b.onclick = function(){cat = c; buildTabs(); buildList();};
-      tabsEl.appendChild(b);
-    });
+  /* arrows only show when the row actually overflows */
+  function updateArrows(){
+    arrowsEl.hidden = othersEl.scrollWidth <= othersEl.clientWidth + 2;
   }
-
-  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
-
-  function buildList(){
-    var t = term.trim().toLowerCase().replace(/^a!/,"");
-    var rows = CMDS.filter(function(c){
-      if(cat !== "all" && c[3] !== cat) return false;
-      if(!t) return true;
-      var hay = [c[0]].concat(c[1]).join(" ").toLowerCase() + " " + (lang==="id"?c[4]:c[5]).toLowerCase();
-      return hay.indexOf(t) !== -1;
-    });
-    listEl.innerHTML = "";
-    if(!rows.length){
-      listEl.innerHTML = '<div class="empty">'+T[lang].empty+'</div>';
-      return;
-    }
-    rows.forEach(function(c){
-      var r = document.createElement("div");
-      r.className = "row";
-      var al = c[1].length ? '<span class="al">'+c[1].map(function(a){return "a!"+esc(a)}).join("  ")+'</span>' : "";
-      r.innerHTML = '<div><span class="c">a!'+esc(c[0])+(c[2]?' <em>'+esc(c[2])+'</em>':'')+'</span>'+al+'</div>'+
-        '<p>'+esc(lang==="id"?c[4]:c[5])+'</p>'+
-        '<button type="button" class="copy">'+T[lang].copy+'</button>';
-      var btn = r.querySelector(".copy");
-      btn.onclick = function(){
-        var text = "a!"+c[0]+(c[2]?" ":"");
-        var done = function(){
-          btn.textContent = T[lang].copied; btn.classList.add("ok");
-          setTimeout(function(){btn.textContent = T[lang].copy; btn.classList.remove("ok");},1400);
-        };
-        if(navigator.clipboard && navigator.clipboard.writeText){
-          navigator.clipboard.writeText(text).then(done,function(){});
-        }else{
-          var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
-          ta.select(); try{document.execCommand("copy"); done();}catch(e){} document.body.removeChild(ta);
-        }
-      };
-      listEl.appendChild(r);
-    });
+  function slide(dir){
+    var card = othersEl.querySelector(".bot");
+    var step = card ? card.offsetWidth + 18 : 320;
+    othersEl.scrollBy({left: dir * step, behavior: "smooth"});
   }
+  $("#prev").onclick = function(){slide(-1)};
+  $("#next").onclick = function(){slide(1)};
+  window.addEventListener("resize", updateArrows);
+  window.addEventListener("load", updateArrows);
 
   function applyLang(){
     document.documentElement.lang = lang;
     document.querySelectorAll("[data-i18n]").forEach(function(el){el.textContent = T[lang][el.dataset.i18n]});
     document.querySelectorAll("[data-i18n-html]").forEach(function(el){el.innerHTML = T[lang][el.dataset.i18nHtml]});
-    document.querySelectorAll("[data-i18n-ph]").forEach(function(el){
-      el.placeholder = T[lang][el.dataset.i18nPh]; el.setAttribute("aria-label", T[lang][el.dataset.i18nPh]);
-    });
     document.querySelectorAll(".lang button").forEach(function(b){
       b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
     });
+    $("#prev").setAttribute("aria-label", T[lang].prev);
+    $("#next").setAttribute("aria-label", T[lang].next);
     document.title = lang === "id" ? "Arvexis Music – Bot musik Discord" : "Arvexis Music – Discord music bot";
-    buildBots(); buildOthers(); buildTabs(); buildList();
+    buildBots(); buildOthers();
   }
 
   document.querySelectorAll(".lang button").forEach(function(b){
@@ -510,7 +418,6 @@ footer img{width:30px}
       applyLang();
     };
   });
-  qEl.addEventListener("input", function(){term = qEl.value; buildList();});
 
   applyLang();
 })();

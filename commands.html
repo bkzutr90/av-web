@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daftar perintah – Arvexis Music</title>
+<meta name="description" content="Semua perintah Arvexis Music (prefix a!): putar, antrean, voice, dan info.">
+<meta property="og:title" content="Daftar perintah – Arvexis Music">
+<meta property="og:image" content="assets/banner.png">
+<link rel="icon" type="image/png" href="assets/bot-1.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#130c0e;
+  --bg-2:#1b1215;
+  --panel:#221619;
+  --line:#3b2429;
+  --red:#e3153f;
+  --red-deep:#8e0f27;
+  --silver:#cfcfd6;
+  --text:#f3ebe8;
+  --mute:#ab9a9d;
+  --head:"Chakra Petch","Segoe UI",sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--silver);outline-offset:3px}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--head);font-weight:700;font-size:19px;letter-spacing:.01em}
+.brand img{width:34px;height:34px}
+.nav{display:flex;gap:22px;margin-left:auto}
+.nav a{text-decoration:none;color:var(--mute);font-size:15px;font-weight:500;padding:6px 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a[aria-current="page"]{color:var(--text);border-color:var(--red)}
+.lang{display:flex;border:1px solid var(--line)}
+.lang button{background:none;border:0;padding:5px 11px;font-family:var(--head);font-weight:600;font-size:13px;color:var(--mute)}
+.lang button[aria-pressed="true"]{background:var(--red);color:#fff}
+
+/* page */
+main{flex:1}
+.page{padding-block:64px 84px}
+.sec-head{max-width:40em;margin-bottom:36px}
+.sec-head h1{font-family:var(--head);font-weight:700;font-size:clamp(30px,4vw,44px);line-height:1.12}
+.sec-head p{margin-top:12px;color:var(--mute);font-size:17px}
+code{font-family:var(--mono);font-size:.88em;background:var(--panel);padding:1px 6px;color:#ffc9d3}
+
+/* commands */
+.tools{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center}
+.search{flex:1 1 240px;max-width:340px;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:10px 14px;font:inherit}
+.search::placeholder{color:#7d6c70}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{background:none;border:1px solid var(--line);padding:7px 14px;font-family:var(--head);font-weight:600;font-size:14px;color:var(--mute)}
+.tabs button:hover{color:var(--text)}
+.tabs button[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.list{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(220px,340px) 1fr auto;gap:8px 24px;align-items:center;padding:16px 4px;border-bottom:1px solid var(--line)}
+.row .c{font-family:var(--mono);font-size:15px;color:#fff}
+.row .c em{font-style:normal;color:#ff8da3}
+.row .al{display:block;margin-top:3px;font-size:12.5px;color:var(--mute);font-family:var(--mono)}
+.row p{color:#d3c5c7}
+.copy{background:none;border:1px solid var(--line);padding:6px 14px;font-size:13.5px;color:var(--mute);min-width:84px}
+.copy:hover{border-color:var(--red);color:var(--text)}
+.copy.ok{background:var(--red);border-color:var(--red);color:#fff}
+.empty{padding:36px 4px;color:var(--mute)}
+
+/* footer */
+footer{padding:44px 0 56px;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between;align-items:center}
+.fl{display:flex;align-items:center;gap:10px}
+
+@media (max-width:700px){
+  .top .wrap{gap:14px}
+  .nav{gap:14px;font-size:14px}
+  .nav a{font-size:14px}
+  .page{padding-block:44px 60px}
+  .row{grid-template-columns:1fr auto}
+  .row p{grid-column:1/-1;order:3}
+}
+@media (max-width:480px){
+  .nav a.opt{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="assets/bot-1.png" alt="">Arvexis Music</a>
+    <nav class="nav">
+      <a href="index.html" data-i18n="nav_home">Beranda</a>
+      <a class="opt" href="index.html#bot" data-i18n="nav_bots">Undang</a>
+      <a class="opt" href="index.html#lainnya" data-i18n="nav_more">Bot lain</a>
+      <a href="commands.html" aria-current="page" data-i18n="nav_cmds">Perintah</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="id" aria-pressed="true">ID</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap page">
+    <div class="sec-head">
+      <h1 data-i18n="cmd_h">Daftar perintah</h1>
+      <p data-i18n="cmd_p">Prefix-nya a!. Isi bagian dalam &lt; &gt; wajib ada, bagian dalam [ ] boleh dikosongkan. Klik tombol salin untuk mengambil perintahnya.</p>
+    </div>
+    <div class="tools">
+      <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Cari perintah" aria-label="Cari perintah">
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fl"><span>Arvexis Music</span><span>by</span><span>Ferrsyz</span></div>
+    <a href="index.html" data-i18n="back">Kembali ke beranda</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var T = {
+    id:{
+      nav_home:"Beranda", nav_bots:"Undang", nav_more:"Bot lain", nav_cmds:"Perintah",
+      cmd_h:"Daftar perintah",
+      cmd_p:"Prefix-nya a!. Isi bagian dalam < > wajib ada, bagian dalam [ ] boleh dikosongkan. Klik tombol salin untuk mengambil perintahnya.",
+      search:"Cari perintah", all:"Semua", c_play:"Putar", c_queue:"Antrean", c_voice:"Voice", c_info:"Info",
+      copy:"Salin", copied:"Disalin",
+      empty:"Tidak ada perintah yang cocok. Coba kata lain.",
+      back:"Kembali ke beranda"
+    },
+    en:{
+      nav_home:"Home", nav_bots:"Invite", nav_more:"More bots", nav_cmds:"Commands",
+      cmd_h:"Command list",
+      cmd_p:"The prefix is a!. Parts in < > are required, parts in [ ] are optional. Use the copy button to grab a command.",
+      search:"Search commands", all:"All", c_play:"Playback", c_queue:"Queue", c_voice:"Voice", c_info:"Info",
+      copy:"Copy", copied:"Copied",
+      empty:"No commands match. Try another word.",
+      back:"Back to home"
+    }
+  };
+
+  /* name, aliases, args, category, desc id/en */
+  var CMDS = [
+    ["play",["p"],"<judul / link>","play","Putar lagu (YouTube / link / playlist)","Play a song (YouTube / link / playlist)"],
+    ["pause",["pa"],"","play","Jeda lagu","Pause the song"],
+    ["resume",["r","unpause"],"","play","Lanjutkan lagu","Resume the song"],
+    ["skip",["s","next"],"","play","Lewati lagu sekarang","Skip the current song"],
+    ["previous",["prev","back"],"","play","Kembali ke lagu sebelumnya","Go back to the previous song"],
+    ["stop",["clearstop"],"","play","Hentikan musik & kosongkan queue","Stop the music and clear the queue"],
+    ["seek",[],"<sec | m:ss>","play","Loncat ke posisi tertentu","Jump to a specific position"],
+    ["volume",["vol","v"],"<1-150>","play","Atur volume","Set the volume"],
+    ["queue",["q"],"","queue","Lihat antrean lagu","Show the song queue"],
+    ["remove",["rm"],"<number>","queue","Hapus lagu dari queue (nomor dari a!queue, mulai 2)","Remove a song from the queue (number from a!queue, starts at 2)"],
+    ["clear",["cq"],"","queue","Kosongkan queue (lagu sekarang tetap jalan)","Clear the queue (current song keeps playing)"],
+    ["shuffle",["sh"],"","queue","Acak urutan queue","Shuffle the queue order"],
+    ["loop",["l","repeat"],"[off|track|queue]","queue","Atur mode ulang","Set the repeat mode"],
+    ["autoplay",["ap"],"","queue","Putar lagu rekomendasi otomatis saat queue habis","Automatically play recommended songs when the queue ends"],
+    ["join",["j","summon"],"","voice","Panggil bot ke voice channel kamu","Call the bot to your voice channel"],
+    ["leave",["dc","disconnect","stopbot"],"","voice","Keluarkan bot dari voice","Make the bot leave voice"],
+    ["247",["24/7","stay"],"","voice","Aktif/nonaktifkan mode 24/7 (bot tidak keluar sendiri)","Toggle 24/7 mode (the bot won't leave on its own)"],
+    ["nowplaying",["np"],"","info","Lagu yang sedang diputar","Show the song that's playing"],
+    ["help",["h","commands"],"","info","Daftar command","List all commands"]
+  ];
+  var CATS = ["all","play","queue","voice","info"];
+
+  var lang = "id", cat = "all", term = "";
+  try{
+    var saved = localStorage.getItem("arvexis-lang");
+    if(saved === "id" || saved === "en") lang = saved;
+    else if((navigator.language||"").toLowerCase().indexOf("id") !== 0) lang = "en";
+  }catch(e){
+    if((navigator.language||"").toLowerCase().indexOf("id") !== 0) lang = "en";
+  }
+
+  var $ = function(s){return document.querySelector(s)};
+  var tabsEl = $("#tabs"), listEl = $("#list"), qEl = $("#q");
+
+  function buildTabs(){
+    tabsEl.innerHTML = "";
+    CATS.forEach(function(c){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = c === "all" ? T[lang].all : T[lang]["c_"+c];
+      b.setAttribute("aria-pressed", c === cat ? "true" : "false");
+      b.onclick = function(){cat = c; buildTabs(); buildList();};
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+  function buildList(){
+    var t = term.trim().toLowerCase().replace(/^a!/,"");
+    var rows = CMDS.filter(function(c){
+      if(cat !== "all" && c[3] !== cat) return false;
+      if(!t) return true;
+      var hay = [c[0]].concat(c[1]).join(" ").toLowerCase() + " " + (lang==="id"?c[4]:c[5]).toLowerCase();
+      return hay.indexOf(t) !== -1;
+    });
+    listEl.innerHTML = "";
+    if(!rows.length){
+      listEl.innerHTML = '<div class="empty">'+T[lang].empty+'</div>';
+      return;
+    }
+    rows.forEach(function(c){
+      var r = document.createElement("div");
+      r.className = "row";
+      var al = c[1].length ? '<span class="al">'+c[1].map(function(a){return "a!"+esc(a)}).join("  ")+'</span>' : "";
+      r.innerHTML = '<div><span class="c">a!'+esc(c[0])+(c[2]?' <em>'+esc(c[2])+'</em>':'')+'</span>'+al+'</div>'+
+        '<p>'+esc(lang==="id"?c[4]:c[5])+'</p>'+
+        '<button type="button" class="copy">'+T[lang].copy+'</button>';
+      var btn = r.querySelector(".copy");
+      btn.onclick = function(){
+        var text = "a!"+c[0]+(c[2]?" ":"");
+        var done = function(){
+          btn.textContent = T[lang].copied; btn.classList.add("ok");
+          setTimeout(function(){btn.textContent = T[lang].copy; btn.classList.remove("ok");},1400);
+        };
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(done,function(){});
+        }else{
+          var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+          ta.select(); try{document.execCommand("copy"); done();}catch(e){} document.body.removeChild(ta);
+        }
+      };
+      listEl.appendChild(r);
+    });
+  }
+
+  function applyLang(){
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){el.textContent = T[lang][el.dataset.i18n]});
+    document.querySelectorAll("[data-i18n-ph]").forEach(function(el){
+      el.placeholder = T[lang][el.dataset.i18nPh]; el.setAttribute("aria-label", T[lang][el.dataset.i18nPh]);
+    });
+    document.querySelectorAll(".lang button").forEach(function(b){
+      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
+    });
+    document.title = (lang === "id" ? "Daftar perintah" : "Command list") + " – Arvexis Music";
+    buildTabs(); buildList();
+  }
+
+  document.querySelectorAll(".lang button").forEach(function(b){
+    b.onclick = function(){
+      lang = b.dataset.lang;
+      try{localStorage.setItem("arvexis-lang", lang);}catch(e){}
+      applyLang();
+    };
+  });
+  qEl.addEventListener("input", function(){term = qEl.value; buildList();});
+
+  applyLang();
+})();
+</script>
+</body>
+</html>
