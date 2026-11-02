@@ -107,7 +107,11 @@ section.block{padding-block:84px;border-bottom:1px solid var(--line)}
 .bot img{width:100%;height:auto;flex:none;aspect-ratio:1/1;object-fit:cover}
 .bot h3{font-family:var(--head);font-weight:600;font-size:18px;line-height:1.2}
 .bot h3 span{display:block;font-size:13px;font-weight:500;color:var(--mute);margin-top:2px}
+.bot p{color:var(--mute);font-size:14.5px;line-height:1.5}
 .bot .btn{margin-top:auto;padding:10px 14px;font-size:15px}
+
+/* other bots */
+.others{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;counter-reset:s}
@@ -152,6 +156,7 @@ footer img{width:30px}
   .feat{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr;gap:26px}
   .bots{grid-template-columns:repeat(2,1fr)}
+  .others{grid-template-columns:1fr;max-width:380px}
   .row{grid-template-columns:1fr auto}
   .row p{grid-column:1/-1;order:3}
   section.block{padding-block:60px}
@@ -170,6 +175,7 @@ footer img{width:30px}
       <a href="#fitur" data-i18n="nav_feat">Fitur</a>
       <a href="#bot" data-i18n="nav_bots">Undang</a>
       <a href="#perintah" data-i18n="nav_cmds">Perintah</a>
+      <a href="#lainnya" data-i18n="nav_more">Bot lain</a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" data-lang="id" aria-pressed="true">ID</button>
@@ -253,7 +259,7 @@ footer img{width:30px}
     </div>
   </section>
 
-  <section class="block" id="perintah" style="border-bottom:0">
+  <section class="block" id="perintah">
     <div class="wrap">
       <div class="sec-head">
         <h2 data-i18n="cmd_h">Daftar perintah</h2>
@@ -264,6 +270,16 @@ footer img{width:30px}
         <div class="tabs" id="tabs"></div>
       </div>
       <div class="list" id="list"></div>
+    </div>
+  </section>
+
+  <section class="block bots-band" id="lainnya" style="border-bottom:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="more_h">Bot Arvexis lainnya</h2>
+        <p data-i18n="more_p">Selain musik, Arvexis punya bot untuk tiket, game werewolf, dan pet virtual. Masing-masing diundang terpisah.</p>
+      </div>
+      <div class="others" id="others"></div>
     </div>
   </section>
 </main>
@@ -284,9 +300,16 @@ footer img{width:30px}
     "https://discord.com/oauth2/authorize?client_id=1561467218208759808"
   ];
 
+  /* other bots: key matches the t_/s_/p_ strings below */
+  var OTHERS = [
+    {key:"ticket", img:"assets/ticket.png",   url:"https://discord.com/oauth2/authorize?client_id=1566112578814611467"},
+    {key:"moon",   img:"assets/moonfang.png", url:"https://discord.com/oauth2/authorize?client_id=1561194019042631770"},
+    {key:"pet",    img:"assets/petoria.png",  url:"https://discord.com/oauth2/authorize?client_id=1565820958927880354"}
+  ];
+
   var T = {
     id:{
-      nav_feat:"Fitur", nav_bots:"Undang", nav_cmds:"Perintah",
+      nav_feat:"Fitur", nav_bots:"Undang", nav_cmds:"Perintah", nav_more:"Bot lain",
       hero_h:"Putar musik di Discord, langsung dari servermu.",
       hero_p:"Arvexis Music memutar lagu dari YouTube, link, dan playlist. Ketik <code>a!play</code> lalu judulnya, selesai.",
       cta_invite:"Undang bot", cta_cmds:"Lihat perintah",
@@ -311,10 +334,15 @@ footer img{width:30px}
       search:"Cari perintah", all:"Semua", c_play:"Putar", c_queue:"Antrean", c_voice:"Voice", c_info:"Info",
       copy:"Salin", copied:"Disalin",
       empty:"Tidak ada perintah yang cocok. Coba kata lain.",
+      more_h:"Bot Arvexis lainnya",
+      more_p:"Selain musik, Arvexis punya bot untuk tiket, game werewolf, dan pet virtual. Masing-masing diundang terpisah.",
+      t_ticket:"Arvexis Ticket", s_ticket:"Sistem tiket", p_ticket:"Panel tiket dengan kategori dan form sendiri, claim dan prioritas untuk staff, auto-close, serta penilaian lewat DM. Pakai /ticket setup untuk memulai.",
+      t_moon:"Moonfang", s_moon:"Game Werewolf", p_moon:"Mainkan werewolf bareng teman-teman di server Discord kamu.",
+      t_pet:"Petoria", s_pet:"Virtual pet", p_pet:"Adopsi pet, berburu, duel, rawat di kandang, dan belanja di toko. Satu kerajaan pet untuk servermu.",
       foot:"Bagian dari komunitas Arvexis. Tidak berafiliasi dengan Discord maupun YouTube."
     },
     en:{
-      nav_feat:"Features", nav_bots:"Invite", nav_cmds:"Commands",
+      nav_feat:"Features", nav_bots:"Invite", nav_cmds:"Commands", nav_more:"More bots",
       hero_h:"Play music in Discord, right from your server.",
       hero_p:"Arvexis Music plays songs from YouTube, links and playlists. Type <code>a!play</code> and a title, and you're done.",
       cta_invite:"Invite bot", cta_cmds:"See commands",
@@ -339,6 +367,11 @@ footer img{width:30px}
       search:"Search commands", all:"All", c_play:"Playback", c_queue:"Queue", c_voice:"Voice", c_info:"Info",
       copy:"Copy", copied:"Copied",
       empty:"No commands match. Try another word.",
+      more_h:"More Arvexis bots",
+      more_p:"Besides music, Arvexis has bots for tickets, a werewolf game and virtual pets. Each one is invited separately.",
+      t_ticket:"Arvexis Ticket", s_ticket:"Ticket system", p_ticket:"A ticket panel with your own categories and forms, claim and priority for staff, auto-close, and ratings via DM. Use /ticket setup to get started.",
+      t_moon:"Moonfang", s_moon:"Werewolf game", p_moon:"Play werewolf with your friends right in your Discord server.",
+      t_pet:"Petoria", s_pet:"Virtual pet", p_pet:"Adopt pets, hunt, duel, keep them in the stable, and shop at the store. A whole pet kingdom for your server.",
       foot:"Part of the Arvexis community. Not affiliated with Discord or YouTube."
     }
   };
@@ -377,7 +410,7 @@ footer img{width:30px}
   }
 
   var $ = function(s){return document.querySelector(s)};
-  var botsEl = $("#bots"), tabsEl = $("#tabs"), listEl = $("#list"), qEl = $("#q");
+  var botsEl = $("#bots"), othersEl = $("#others"), tabsEl = $("#tabs"), listEl = $("#list"), qEl = $("#q");
 
   function buildBots(){
     botsEl.innerHTML = "";
@@ -388,6 +421,19 @@ footer img{width:30px}
         '<h3>Arvexis Music<span>'+T[lang].bot+' '+(i+1)+'</span></h3>'+
         '<a class="btn btn-red" href="'+url+'" target="_blank" rel="noopener">'+T[lang].invite+'</a>';
       botsEl.appendChild(d);
+    });
+  }
+
+  function buildOthers(){
+    othersEl.innerHTML = "";
+    OTHERS.forEach(function(b){
+      var d = document.createElement("div");
+      d.className = "bot cut";
+      d.innerHTML = '<img src="'+b.img+'" alt="'+T[lang]["t_"+b.key]+'" width="300" height="300" loading="lazy">'+
+        '<h3>'+T[lang]["t_"+b.key]+'<span>'+T[lang]["s_"+b.key]+'</span></h3>'+
+        '<p>'+T[lang]["p_"+b.key]+'</p>'+
+        '<a class="btn btn-red" href="'+b.url+'" target="_blank" rel="noopener">'+T[lang].invite+'</a>';
+      othersEl.appendChild(d);
     });
   }
 
@@ -454,7 +500,7 @@ footer img{width:30px}
       b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
     });
     document.title = lang === "id" ? "Arvexis Music – Bot musik Discord" : "Arvexis Music – Discord music bot";
-    buildBots(); buildTabs(); buildList();
+    buildBots(); buildOthers(); buildTabs(); buildList();
   }
 
   document.querySelectorAll(".lang button").forEach(function(b){
