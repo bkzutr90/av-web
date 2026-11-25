@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Daftar perintah – Arvexis Music</title>
-<meta name="description" content="Semua perintah Arvexis Music (prefix a!): putar, antrean, voice, dan info.">
+<meta name="description" content="Semua perintah Arvexis Music (prefix a!): putar, antrean, voice, streak, dan info.">
 <meta property="og:title" content="Daftar perintah – Arvexis Music">
 <meta property="og:image" content="assets/banner.png">
 <link rel="icon" type="image/png" href="assets/bot-1.png">
@@ -141,7 +141,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-bet
       nav_home:"Beranda", nav_bots:"Undang", nav_more:"Bot lain", nav_cmds:"Perintah",
       cmd_h:"Daftar perintah",
       cmd_p:"Prefix-nya a!. Isi bagian dalam < > wajib ada, bagian dalam [ ] boleh dikosongkan. Klik tombol salin untuk mengambil perintahnya.",
-      search:"Cari perintah", all:"Semua", c_play:"Putar", c_queue:"Antrean", c_voice:"Voice", c_info:"Info",
+      search:"Cari perintah", all:"Semua", c_play:"Putar", c_queue:"Antrean", c_voice:"Voice", c_streak:"Streak", c_info:"Info",
       copy:"Salin", copied:"Disalin",
       empty:"Tidak ada perintah yang cocok. Coba kata lain.",
       back:"Kembali ke beranda"
@@ -150,7 +150,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-bet
       nav_home:"Home", nav_bots:"Invite", nav_more:"More bots", nav_cmds:"Commands",
       cmd_h:"Command list",
       cmd_p:"The prefix is a!. Parts in < > are required, parts in [ ] are optional. Use the copy button to grab a command.",
-      search:"Search commands", all:"All", c_play:"Playback", c_queue:"Queue", c_voice:"Voice", c_info:"Info",
+      search:"Search commands", all:"All", c_play:"Playback", c_queue:"Queue", c_voice:"Voice", c_streak:"Streak", c_info:"Info",
       copy:"Copy", copied:"Copied",
       empty:"No commands match. Try another word.",
       back:"Back to home"
@@ -176,10 +176,16 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-bet
     ["join",["j","summon"],"","voice","Panggil bot ke voice channel kamu","Call the bot to your voice channel"],
     ["leave",["dc","disconnect","stopbot"],"","voice","Keluarkan bot dari voice","Make the bot leave voice"],
     ["247",["24/7","stay"],"","voice","Aktif/nonaktifkan mode 24/7 (bot tidak keluar sendiri)","Toggle 24/7 mode (the bot won't leave on its own)"],
+    ["streak",["streaks","flame"],"[@user]","streak","Lihat dashboard streak api kamu (atau milik user lain)","Show your streak dashboard (or another user's)"],
+    ["topstreak",["ts","topstreaks"],"","streak","Pasangan dengan streak terlama di server","Pairs with the longest streaks in this server"],
+    ["topstreaker",["tsr","topstreakers"],"","streak","Member dengan streak aktif terbanyak","Members with the most active streaks"],
+    ["restorestreak",["restore"],"<@user>","streak","Pulihkan streak yang baru padam (dalam 24 jam, ada batas per bulan)","Restore a streak that just ended (within 24 hours, monthly limit applies)"],
+    ["partner",[],"<@user>","streak","Resmikan streak 7 hari jadi Partner, lalu ganti status: Bestie, Soulmate, Lovers, Married","Make a 7-day streak official as Partner, then switch status: Bestie, Soulmate, Lovers, Married"],
+    ["streakchannel",["streakch"],"<#channel> | all | on | off","streak","Atur channel tempat streak dihitung (butuh izin Manage Server)","Choose where streaks count (requires Manage Server)"],
     ["nowplaying",["np"],"","info","Lagu yang sedang diputar","Show the song that's playing"],
     ["help",["h","commands"],"","info","Daftar command","List all commands"]
   ];
-  var CATS = ["all","play","queue","voice","info"];
+  var CATS = ["all","play","queue","voice","streak","info"];
 
   var lang = "id", cat = "all", term = "";
   try{
